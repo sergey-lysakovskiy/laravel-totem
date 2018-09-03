@@ -51,7 +51,7 @@ class ConsoleServiceProvider extends ServiceProvider
                 $event->thenPing($task->ping_url_after);
             }
             if ($task->dont_overlap) {
-                $event->withoutOverlapping();
+                $event->withoutOverlapping(60);
             }
             if ($task->run_in_maintenance) {
                 $event->evenInMaintenanceMode();
