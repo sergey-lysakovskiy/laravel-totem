@@ -157,6 +157,31 @@
     <hr class="uk-divider-icon">
     <div class="uk-grid">
         <div class="uk-width-1-1@s uk-width-1-3@m">
+            <label class="uk-form-label">Ping URL Before (optional)</label>
+            <div class="uk-text-meta">The scheduler can automatically ping a given URL before a task is launched. This method is useful for notifying an external service, that your scheduled task is commencing</div>
+        </div>
+        <div class="uk-width-1-1@s uk-width-2-3@m">
+            <input type="text" id="ping_url_before" name="ping_url_before" value="{{old('ping_url_before', $task->ping_url_before)}}" class="uk-input" placeholder="e.g. https://cronitor.link/xxxxxx">
+            @if($errors->has('ping_url_before'))
+                <p class="uk-text-danger">{{$errors->first('ping_url_before')}}</p>
+            @endif
+        </div>
+    </div>
+    <div class="uk-grid">
+        <div class="uk-width-1-1@s uk-width-1-3@m">
+            <label class="uk-form-label">Ping URL After (optional)</label>
+            <div class="uk-text-meta">The scheduler can automatically ping a given URL after a task is complete. This method is useful for notifying an external service, that your scheduled task is has finished execution</div>
+        </div>
+        <div class="uk-width-1-1@s uk-width-2-3@m">
+            <input type="text" id="ping_url_after" name="ping_url_after" value="{{old('ping_url_after', $task->ping_url_after)}}" class="uk-input" placeholder="e.g. https://cronitor.link/xxxxxx">
+            @if($errors->has('ping_url_after'))
+                <p class="uk-text-danger">{{$errors->first('ping_url_after')}}</p>
+            @endif
+        </div>
+    </div>
+    <hr class="uk-divider-icon">
+    <div class="uk-grid">
+        <div class="uk-width-1-1@s uk-width-1-3@m">
             <label class="uk-form-label">Email Notification (optional)</label>
             <div class="uk-text-meta">Add an email address to receive notifications when this task gets executed. Leave empty if you do not wish to receive email notifications</div>
         </div>

@@ -26,6 +26,8 @@ class Task extends TotemModel
         'is_active',
         'dont_overlap',
         'run_in_maintenance',
+        'ping_url_before',
+        'ping_url_after',
         'notification_email_address',
         'notification_phone_number',
         'notification_slack_webhook',

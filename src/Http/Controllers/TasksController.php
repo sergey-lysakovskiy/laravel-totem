@@ -179,6 +179,8 @@ class TasksController extends Controller
                             'notification_slack_webhook' => $record->notification_slack_webhook,
                             'auto_cleanup_num' => $record->auto_cleanup_num,
                             'auto_cleanup_type' => $record->auto_cleanup_type,
+                            'ping_url_before' => $record->ping_url_before,
+                            'ping_url_after' => $record->ping_url_after,
                         ]);
 
                         if (! empty($record->frequencies)) {

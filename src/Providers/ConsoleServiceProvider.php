@@ -44,8 +44,14 @@ class ConsoleServiceProvider extends ServiceProvider
                     Executed::dispatch($task, $event->start);
                 })
                 ->sendOutputTo(storage_path($task->getMutexName()));
+            if($task->ping_url_before) {
+                $event->pingBefore($task->ping_url_before);
+            }
+            if($task->ping_url_after) {
+                $event->thenPing($task->ping_url_after);
+            }
             if ($task->dont_overlap) {
-                $event->withoutOverlapping();
+                $event->withoutOverlapping(60);
             }
             if ($task->run_in_maintenance) {
                 $event->evenInMaintenanceMode();
