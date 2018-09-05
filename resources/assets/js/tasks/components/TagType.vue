@@ -1,7 +1,7 @@
 <template>
     <div class="tags-wrapper">
         <span v-for="tag in tags">
-            <a class="uk-badge uk-padding-small uk-margin-small-right" :href="'/totem/tasks?tag='+tag.id">{{ tag.name }}</a>
+            <a class="uk-label uk-margin-small-right tag-badge" :href="'/totem/tasks?tag='+tag.id">{{ tag.name }}</a>
         </span>
         <a class="uk-badge add-more-tag-badge" @click="showModal = true">+</a>
         <uikit-modal :show="showModal" @close="showModal = false">
@@ -10,7 +10,7 @@
             </div>
             <div class="uk-modal-body">
                 <fieldset class="uk-fieldset">
-                    <div class="uk-width-1-1@s uk-width-2-3@m">
+                    <div class="uk-width-1-1@s">
                         <input class="uk-input" placeholder="Tag name" v-model="tag.name" type="text">
                     </div>
                 </fieldset>
@@ -74,9 +74,13 @@
     .tags-wrapper {
         position:  relative;
     }
+    .tag-badge:hover {
+        color: #fff;
+    }
     .add-more-tag-badge {
         position: absolute;
-        top: 0;
-        right: 0;
+        top: 3px;
+        right: -50px;
+        background: #32d296;
     }
 </style>
