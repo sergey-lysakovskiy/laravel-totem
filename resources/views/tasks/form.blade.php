@@ -55,6 +55,23 @@
             <input class="uk-input" placeholder="e.g. --type=all for options or name=John for arguments" name="parameters" id="parameters" value="{{old('parameters', $task->parameters)}}" type="text">
         </div>
     </div>
+
+    <div class="uk-grid">
+        <div class="uk-width-1-1@s uk-width-1-3@m">
+            <label class="uk-form-label">Tags</label>
+            <div class="uk-text-meta">Select a tags for your task.</div>
+        </div>
+        <div class="uk-width-1-1@s uk-width-2-3@m">
+            <multiselect v-model="value" :options="options" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="false" placeholder="Pick a tags" label="name" track-by="name" :preselect-first="false">
+                <template slot="tag" slot-scope="props"><span class="custom__tag"><span>@{{ props.option.name }}</span><span class="custom__remove" @click="props.remove(props.option)">❌</span></span></template>
+                <input ref="tags" name="tags" id="tags" value="{{old('tags', $task->exists ? json_encode($task->tags) : json_encode([]))}}" type="hidden">
+            </multiselect>
+        @if($errors->has('tags'))
+                <p class="uk-text-danger">{{$errors->first('tags')}}</p>
+            @endif
+        </div>
+    </div>
+
     <hr class="uk-divider-icon">
     <div class="uk-grid">
         <div class="uk-width-1-1@s uk-width-1-3@m">

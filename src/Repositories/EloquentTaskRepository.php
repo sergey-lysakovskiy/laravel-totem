@@ -86,6 +86,8 @@ class EloquentTaskRepository implements TaskInterface
 
         $task->fill(array_only($input, $task->getFillable()))->save();
 
+        $task->tags()->sync($input['tags']);
+
         Created::dispatch($task);
 
         return $task;
@@ -107,6 +109,8 @@ class EloquentTaskRepository implements TaskInterface
         }
 
         $task->fill(array_only($input, $task->getFillable()))->save();
+
+        $task->tags()->sync($input['tags']);
 
         Updated::dispatch($task);
 
