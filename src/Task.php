@@ -122,7 +122,7 @@ class Task extends TotemModel
      */
     public function tags()
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(Tag::class, config('totem.table_prefix').'tag_task');
     }
 
     /**
