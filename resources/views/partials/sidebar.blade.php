@@ -18,10 +18,3 @@
     </div>
     <hr>
 </aside>
-<script>
-    import TaskType from "../../assets/js/tasks/components/TaskType";
-
-    export default {
-        components: {TaskType}
-    }
-</script>

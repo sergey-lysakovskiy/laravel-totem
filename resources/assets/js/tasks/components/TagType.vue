@@ -11,7 +11,7 @@
             <div class="uk-modal-body">
                 <fieldset class="uk-fieldset">
                     <div class="uk-width-1-1@s">
-                        <input class="uk-input" placeholder="Tag name" v-model="tag.name" type="text" v-on:keypress="nameHandler">
+                        <input class="uk-input" placeholder="Tag name" v-model="tag.name" type="text">
                         <p class="uk-text-danger" v-for="error in errors">{{ error.message }}</p>
                     </div>
                 </fieldset>
