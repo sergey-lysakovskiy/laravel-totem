@@ -3,10 +3,6 @@
 namespace Studio\Totem\Http\Controllers;
 
 use Studio\Totem\Tag;
-use Studio\Totem\Task;
-use Studio\Totem\Totem;
-use Studio\Totem\Frequency;
-use Studio\Totem\Contracts\TaskInterface;
 use Studio\Totem\Http\Requests\TagRequest;
 
 class TagsController extends Controller

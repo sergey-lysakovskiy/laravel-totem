@@ -11,7 +11,8 @@
             <div class="uk-modal-body">
                 <fieldset class="uk-fieldset">
                     <div class="uk-width-1-1@s">
-                        <input class="uk-input" placeholder="Tag name" v-model="tag.name" type="text">
+                        <input class="uk-input" placeholder="Tag name" v-model="tag.name" type="text" v-on:keypress="nameHandler">
+                        <p class="uk-text-danger" v-for="error in errors">{{ error.message }}</p>
                     </div>
                 </fieldset>
             </div>
@@ -43,7 +44,8 @@
                 tag: {
                     name: ''
                 },
-                tags: []
+                tags: [],
+                errors: [],
             };
         },
         methods: {
@@ -54,9 +56,10 @@
                     this.tag
                 ).then(function (response) {
                     self.tags.push(response.data);
+                    self.tag.name = '';
                     self.showModal = false;
                 }).catch(function (response) {
-                    console.log(response);
+                    self.errors.push(response)
                 });
             },
             getTags() {

@@ -24,19 +24,7 @@ class TagRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:2',
-        ];
-    }
-
-    /**
-     * Get custom messages for validator errors.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'name.required' => 'Tag name is required',
+            'name' => 'required|min:2|unique:'.config('totem.table_prefix').'tags',
         ];
     }
 }
