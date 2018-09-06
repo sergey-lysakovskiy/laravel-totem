@@ -62,9 +62,7 @@
             <div class="uk-text-meta">Select a tags for your task.</div>
         </div>
         <div class="uk-width-1-1@s uk-width-2-3@m">
-            <multiselect v-model="value" :options="options" :multiple="true" :close-on-select="false" :clear-on-select="false" :hide-selected="true" :preserve-search="false" placeholder="Pick a tags" label="name" track-by="name" :preselect-first="false">
-                <template slot="tag" slot-scope="props"><span class="custom__tag"><span>@{{ props.option.name }}</span><span class="custom__remove" @click="props.remove(props.option)">❌</span></span></template>
-            </multiselect>
+            <multiselect :init-value="{{ json_encode(old('tags', $task->exists ? $task->tags()->pluck('id')->toArray() : []))  }}"></multiselect>
         @if($errors->has('tags'))
                 <p class="uk-text-danger">{{$errors->first('tags')}}</p>
             @endif

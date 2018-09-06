@@ -7,6 +7,7 @@
                 :multiple="true"
                 track-by="id"
                 label="name"
+                placeholder="Pick a tag or tags"
                 key="id"
         ></vue-multiselect>
         <input name="tags[]" type="hidden" v-for="selected in value" :value="selected.id">
@@ -21,6 +22,7 @@
         components: {
             VueMultiselect
         },
+        props: ['initValue'],
         mounted() {
             this.fillOptions();
         },
@@ -36,6 +38,17 @@
                     .then(response => {
 
                         this.options = response.data.tags;
+
+                        if (this.initValue.length) {
+                            var self = this;
+                            this.initValue.map(function (value, key) {
+                                self.options.map(function (option, index) {
+                                    if (option.id == value) {
+                                        self.value.push(option);
+                                    }
+                                })
+                            });
+                        }
 
                     });
             },
