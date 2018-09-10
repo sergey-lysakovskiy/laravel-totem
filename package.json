@@ -11,9 +11,8 @@
     "babel-loader": "^7",
     "css-loader": "^1.0.0",
     "es6-promise": "^4.0.5",
-    "gulp": "^3.9.1",
     "laravel-elixir": "^6.0.0-14",
-    "laravel-elixir-vue-2": "^0.2.0",
+    "laravel-elixir-vue-2": "^0.3.0",
     "laravel-elixir-webpack-official": "^1.0.2",
     "lodash": "^4.16.2",
     "moment": "^2.10.6",
@@ -29,5 +28,8 @@
     "webpack": "^4.17.2",
     "webpack-ruleset": "^0.1.8",
     "xml-loader": "1.1.0"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1"
   }
 }
