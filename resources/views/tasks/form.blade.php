@@ -55,6 +55,20 @@
             <input class="uk-input" placeholder="e.g. --type=all for options or name=John for arguments" name="parameters" id="parameters" value="{{old('parameters', $task->parameters)}}" type="text">
         </div>
     </div>
+
+    <div class="uk-grid">
+        <div class="uk-width-1-1@s uk-width-1-3@m">
+            <label class="uk-form-label">Tags</label>
+            <div class="uk-text-meta">Select a tags for your task.</div>
+        </div>
+        <div class="uk-width-1-1@s uk-width-2-3@m">
+            <multiselect :init-value="{{ json_encode(old('tags', $task->exists ? $task->tags()->pluck('id')->toArray() : []))  }}"></multiselect>
+        @if($errors->has('tags'))
+                <p class="uk-text-danger">{{$errors->first('tags')}}</p>
+            @endif
+        </div>
+    </div>
+
     <hr class="uk-divider-icon">
     <div class="uk-grid">
         <div class="uk-width-1-1@s uk-width-1-3@m">

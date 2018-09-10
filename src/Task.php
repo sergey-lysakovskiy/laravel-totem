@@ -116,6 +116,16 @@ class Task extends TotemModel
     }
 
     /**
+     * Results Relation.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, config('totem.table_prefix').'tag_task');
+    }
+
+    /**
      * Returns the most recent result entry for this task.
      *
      * @return Model|null

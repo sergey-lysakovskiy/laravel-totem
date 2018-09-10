@@ -13,4 +13,8 @@
         </li>
     </ul>
     <hr>
+    <div class="uk-width-1-1@s uk-width-2-3@m">
+        <tag-type></tag-type>
+    </div>
+    <hr>
 </aside>

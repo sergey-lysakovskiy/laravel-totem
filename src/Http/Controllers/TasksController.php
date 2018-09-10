@@ -43,6 +43,11 @@ class TasksController extends Controller
                 ->when(request('q'), function ($query) {
                     $query->where('description', 'LIKE', '%'.request('q').'%');
                 })
+                ->when(request('tag'), function ($query) {
+                    $query->with('tags')->whereHas('tags',function ($query) {
+                        $query->where(config('totem.table_prefix').'tag_task'.'.tag_id', request('tag'));
+                    });
+                })
                 ->paginate(20),
         ]);
     }
