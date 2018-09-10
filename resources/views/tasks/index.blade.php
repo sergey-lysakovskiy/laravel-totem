@@ -6,20 +6,24 @@
 @section('title')
     <div class="uk-flex uk-flex-between uk-flex-middle">
         <h4 class="uk-card-title uk-margin-remove">Tasks</h4>
-        <form class="uk-display-inline uk-search uk-search-default">
-            <span class="uk-icon uk-search-icon">
+        {!! Form::open([
+            'id' => 'totem__search__form',
+            'url' => Request::fullUrl(),
+            'method' => 'GET',
+            'class' => 'uk-display-inline uk-search uk-search-default'
+        ]) !!}
+        <span class="uk-icon uk-search-icon" style="cursor: pointer; pointer-events: auto;" onclick="totem__search__form.submit()">
                 <icon name="search" :scale="100"></icon>
             </span>
-
-            <input class="uk-search-input" type="search" placeholder="Search...">
-        </form>
+        {!! Form::text('q', request('q'), ['class' => 'uk-search-input', 'placeholder' => 'Search...']) !!}
+        {!! Form::close() !!}
     </div>
 @stop
 @section('main-panel-content')
     <table class="uk-table uk-table-responsive" cellpadding="0" cellspacing="0" class="mb1">
         <thead>
             <tr>
-                <th>Description</th>
+                <th>{!! Html::columnSort('Description', 'description') !!}</th>
                 <th>Average Runtime</th>
                 <th>Last Run</th>
                 <th>Next Run</th>
@@ -36,10 +40,10 @@
                         <span class="uk-float-right uk-hidden@s uk-text-muted">Command</span>
                     </td>
                     <td>
-                        {{  $task->results->count() > 0 ? number_format(  $task->results->sum('duration') / (1000 * $task->results->count()) , 2) : '0' }} seconds
+                        {{ number_format(  $task->averageRuntime / 1000 , 2 ) }} seconds
                         <span class="uk-float-right uk-hidden@s uk-text-muted">Avg. Runtime</span>
                     </td>
-                    @if($last = $task->results->last())
+                    @if($last = $task->lastResult)
                         <td>
                             {{$last->ran_at->toDateTimeString()}}
                             <span class="uk-float-right uk-hidden@s uk-text-muted">Last Run</span>
@@ -71,5 +75,21 @@
 @stop
 @section('main-panel-footer')
     <a class="uk-button uk-button-primary uk-button-small" href="{{route('totem.task.create')}}">New Task</a>
+    <a class="uk-button uk-button-primary uk-button-small uk-float-right" href="{{route('totem.task.export')}}">Export</a>
     {{$tasks->links('totem::partials.pagination')}}
+@stop
+@section('main-panel-after')
+    <div class="uk-card uk-card-default">
+        <div class="uk-card-footer">
+            @if($errors->any())
+                <div class="uk-text-danger">
+                    {{$errors->first()}}
+                </div>
+            @endif
+            {!! Form::open(['route' => 'totem.task.import', 'enctype' => 'multipart/form-data']) !!}
+            {!! Form::file('tasks') !!}
+            {!! Form::submit('Upload', ['class' => 'uk-button uk-button-primary uk-button-small uk-float-right']) !!}
+            {!! Form::close() !!}
+        </div>
+    </div>
 @stop

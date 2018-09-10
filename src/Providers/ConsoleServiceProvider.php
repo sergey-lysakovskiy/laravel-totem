@@ -16,11 +16,8 @@ class ConsoleServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // TODO: refactor this to resolving callback while 5.5 branching
-        $this->app->booted(function () {
-            if ($this->app->runningInConsole()) {
-                $this->schedule($this->app->make(Schedule::class));
-            }
+        $this->app->resolving(Schedule::class, function ($schedule) {
+            $this->schedule($schedule);
         });
     }
 
@@ -47,11 +44,20 @@ class ConsoleServiceProvider extends ServiceProvider
                     Executed::dispatch($task, $event->start);
                 })
                 ->sendOutputTo(storage_path($task->getMutexName()));
+            if($task->ping_url_before) {
+                $event->pingBefore($task->ping_url_before);
+            }
+            if($task->ping_url_after) {
+                $event->thenPing($task->ping_url_after);
+            }
             if ($task->dont_overlap) {
-                $event->withoutOverlapping();
+                $event->withoutOverlapping(60);
             }
             if ($task->run_in_maintenance) {
                 $event->evenInMaintenanceMode();
+            }
+            if ($task->run_on_one_server && in_array(config('cache.default'), ['memcached', 'redis'])) {
+                $event->onOneServer();
             }
         });
     }

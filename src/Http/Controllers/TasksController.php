@@ -4,7 +4,7 @@ namespace Studio\Totem\Http\Controllers;
 
 use Studio\Totem\Task;
 use Studio\Totem\Totem;
-use Illuminate\Support\Facades\Artisan;
+use Studio\Totem\Frequency;
 use Studio\Totem\Contracts\TaskInterface;
 use Studio\Totem\Http\Requests\TaskRequest;
 
@@ -35,7 +35,20 @@ class TasksController extends Controller
     public function index()
     {
         return view('totem::tasks.index', [
-            'tasks' => $this->tasks->builder()->paginate(10),
+            'tasks' => $this->tasks
+                ->builder()
+                ->sortableBy([
+                    'description',
+                ], ['description'=>'asc'])
+                ->when(request('q'), function ($query) {
+                    $query->where('description', 'LIKE', '%'.request('q').'%');
+                })
+                ->when(request('tag'), function ($query) {
+                    $query->with('tags')->whereHas('tags',function ($query) {
+                        $query->where(config('totem.table_prefix').'tag_task'.'.tag_id', request('tag'));
+                    });
+                })
+                ->paginate(20),
         ]);
     }
 
@@ -48,9 +61,7 @@ class TasksController extends Controller
     {
         return view('totem::tasks.form', [
             'task'          => new Task,
-            'commands'      => collect(Artisan::all())->sortBy(function ($command) {
-                return $command->getDescription();
-            }),
+            'commands'      => Totem::getCommands(),
             'timezones'     => timezone_identifiers_list(),
             'frequencies'   => Totem::frequencies(),
         ]);
@@ -94,9 +105,7 @@ class TasksController extends Controller
     {
         return view('totem::tasks.form', [
             'task'          => $task,
-            'commands'      => collect(Artisan::all())->sortBy(function ($command) {
-                return $command->getDescription();
-            }),
+            'commands'      => Totem::getCommands(),
             'timezones'     => timezone_identifiers_list(),
             'frequencies'   => Totem::frequencies(),
         ]);
@@ -131,5 +140,77 @@ class TasksController extends Controller
         return redirect()
             ->route('totem.tasks.all')
             ->with('success', trans('totem::messages.success.delete'));
+    }
+
+    /**
+     * JSON representation of tasks and their frequencies.
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function export()
+    {
+        return response($this->tasks->findAll()->toJson(), 200, [
+            'Content-Type' => 'application/json',
+            'Content-Disposition' => 'attachment; filename="totem_tasks.json"',
+        ]);
+    }
+
+    /**
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function import()
+    {
+        $errors = [];
+        $records_imported = 0;
+        if (request()->hasFile('tasks')) {
+            $file = request()->file('tasks');
+            if (ends_with($file->getClientOriginalName(), '.json')) {
+                try {
+                    $data = json_decode(file_get_contents($file->getPathname()));
+                    foreach ($data as $record) {
+                        $task = Task::updateOrCreate([
+                            'id' => $record->id,
+                        ], [
+                            'description' => $record->description,
+                            'command' => $record->command,
+                            'parameters' => $record->parameters,
+                            'expression' => $record->expression,
+                            'timezone' => $record->timezone,
+                            'is_active' => $record->is_active,
+                            'dont_overlap' => $record->dont_overlap,
+                            'run_in_maintenance' => $record->run_in_maintenance,
+                            'notification_email_address' => $record->notification_email_address,
+                            'notification_phone_number' => $record->notification_phone_number,
+                            'notification_slack_webhook' => $record->notification_slack_webhook,
+                            'auto_cleanup_num' => $record->auto_cleanup_num,
+                            'auto_cleanup_type' => $record->auto_cleanup_type,
+                            'ping_url_before' => $record->ping_url_before,
+                            'ping_url_after' => $record->ping_url_after,
+                        ]);
+
+                        if (! empty($record->frequencies)) {
+                            foreach ($record->frequencies as $freq) {
+                                Frequency::updateOrCreate([
+                                    'id' => $freq->id,
+                                ], [
+                                    'task_id' => $task->id,
+                                    'label' => $freq->label,
+                                    'interval' => $freq->interval,
+                                ]);
+                            }
+                        }
+                        $records_imported++;
+                    }
+                } catch (\Exception $ex) {
+                    $errors[] = 'An error occurred while importing data.';
+                }
+            }
+        }
+
+        if ($records_imported == 0) {
+            $errors[] = 'Invalid data or no record selected.';
+        }
+
+        return redirect(route('totem.tasks.all'))->withErrors($errors);
     }
 }

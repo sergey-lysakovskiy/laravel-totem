@@ -2,11 +2,13 @@ import './bootstrap'
 import Vue from 'vue'
 import moment from 'moment'
 import Icon from './components/Icon.vue';
-import UIKitAlert from './components/UiKitAlert.vue'
+import UIKitAlert from './components/UIKitAlert.vue'
 import TaskType from './tasks/components/TaskType.vue'
+import TagType from './tasks/components/TagType.vue'
 import TaskOutput from './tasks/components/TaskOutput.vue'
 import StatusButton from './tasks/components/StatusButton.vue'
 import ExecuteButton from './tasks/components/ExecuteButton.vue'
+import Multiselect from './tasks/components/Multiselect.vue'
 
 Promise.delay = function (time) {
     return new Promise((resolve, reject) => {
@@ -48,6 +50,8 @@ new Vue({
         'status-button': StatusButton,
         'execute-button': ExecuteButton,
         'task-type' : TaskType,
-        'task-output' : TaskOutput
+        'tag-type' : TagType,
+        'task-output' : TaskOutput,
+        'multiselect' : Multiselect
     }
 })

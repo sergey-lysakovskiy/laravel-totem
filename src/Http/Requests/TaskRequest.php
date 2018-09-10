@@ -28,9 +28,12 @@ class TaskRequest extends FormRequest
             'command'                    => 'required',
             'expression'                 => 'nullable|required_if:type,expression|cron_expression',
             'frequencies'                => 'required_if:type,frequency|array',
+            'ping_url_before'            => 'nullable|url',
+            'ping_url_after'             => 'nullable|url',
             'notification_email_address' => 'nullable|email',
             'notification_phone_number'  => 'nullable|digits_between:11,13',
             'notification_slack_webhook' => 'nullable|url',
+            'tags'                       => 'array|required'
         ];
     }
 
@@ -48,9 +51,12 @@ class TaskRequest extends FormRequest
             'frequencies.required_if'                         => 'At least one frequency is required',
             'frequencies.array'                               => 'At least one frequency is required',
             'cron_expression'                                 => 'This is not a valid cron expression.',
+            'ping_url_before'                                 => 'Ping before field must contain a valid url',
+            'ping_url_after'                                  => 'Ping after field must contain a valid url',
             'notification_email_address.email'                => 'Email address is not valid',
             'notification_phone_number.digits_between'        => 'Phone number should be between 11 and 13 digits including country code',
             'notification_slack_webhook.url'                  => 'Slack Webhook must be a valid url',
+            'tags.required'                                   => 'Please select a one tag or more'
         ];
     }
 

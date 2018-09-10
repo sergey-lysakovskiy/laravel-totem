@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFrequencyParametersTable extends Migration
+class CreateTagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class CreateFrequencyParametersTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('totem.table_prefix').'frequency_parameters', function (Blueprint $table) {
+        Schema::create(config('totem.table_prefix').'tags', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('frequency_id');
             $table->string('name');
-            $table->string('value');
             $table->timestamps();
+        });
+
+        Schema::create(config('totem.table_prefix').'tag_task', function (Blueprint $table) {
+            $table->unsignedInteger('task_id');
+            $table->unsignedInteger('tag_id');
         });
     }
 
@@ -29,6 +32,7 @@ class CreateFrequencyParametersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('totem.table_prefix').'frequency_parameters');
+        Schema::dropIfExists(config('totem.table_prefix').'tags');
+        Schema::dropIfExists(config('totem.table_prefix').'tag_task');
     }
 }

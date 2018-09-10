@@ -2,17 +2,10 @@
 
 namespace Studio\Totem;
 
-use Studio\Totem\Traits\HasParameters;
-
-class Frequency extends TotemModel
+class Tag extends TotemModel
 {
-    use HasParameters;
-
-    protected $table = 'task_frequencies';
-
     protected $fillable = [
-        'label',
-        'interval',
+        'name'
     ];
 
     /**

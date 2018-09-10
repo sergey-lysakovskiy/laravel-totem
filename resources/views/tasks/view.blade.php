@@ -42,6 +42,14 @@
             <span class="uk-float-left">{{$task->updated_at->toDateTimeString()}}</span>
         </li>
         <li>
+            <span class="uk-text-muted uk-float-right">Ping URL before</span>
+            <span class="uk-float-left">{{$task->ping_url_before or 'N/A'}}</span>
+        </li>
+        <li>
+            <span class="uk-text-muted uk-float-right">Ping URL after</span>
+            <span class="uk-float-left">{{$task->ping_url_after or 'N/A'}}</span>
+        </li>
+        <li>
             <span class="uk-text-muted uk-float-right">Email Notification</span>
             <span class="uk-float-left">{{$task->notification_email_address or 'N/A'}}</span>
         </li>
@@ -61,6 +69,14 @@
             <span class="uk-text-muted uk-float-right">Next Run Schedule</span>
             <span class="uk-float-left">{{$task->upcoming }}</span>
         </li>
+        <li>
+            <span class="uk-text-muted uk-float-right">Tags</span>
+            <span class="uk-float-left">
+                @foreach($task->tags as $tag)
+                    <span class="uk-label">{{ $tag->name }}</span>
+                @endforeach
+            </span>
+        </li>
         @if($task->dont_overlap)
             <li>
                 <span class="uk-float-left">Doesn't Overlap with another instance of this task</span>
@@ -69,6 +85,11 @@
         @if($task->run_in_maintenance)
             <li>
                 <span class="uk-float-left">Runs in maintenance mode</span>
+            </li>
+        @endif
+        @if($task->run_on_one_server)
+            <li>
+                <span class="uk-float-left">Runs on a single server</span>
             </li>
         @endif
     </ul>

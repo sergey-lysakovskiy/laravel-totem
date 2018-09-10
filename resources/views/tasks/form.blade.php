@@ -34,7 +34,11 @@
             <select id="command" name="command" class="uk-select" placeholder="Click here to select one of the available commands">
                 <option value="">Select a command</option>
                 @foreach ($commands as $command)
-                    <option value="{{$command->getName()}}" {{old('command', $task->command) == $command->getName() ? 'selected' : ''}}>{{$command->getDescription()}}</option>
+                    <optgroup label="{{$command->getName()}}">
+                        <option value="{{$command->getName()}}" {{old('command', $task->command) == $command->getName() ? 'selected' : ''}}>
+                            {{$command->getDescription()}}
+                        </option>
+                    </optgroup>
                 @endforeach
             </select>
             @if($errors->has('command'))
@@ -51,6 +55,20 @@
             <input class="uk-input" placeholder="e.g. --type=all for options or name=John for arguments" name="parameters" id="parameters" value="{{old('parameters', $task->parameters)}}" type="text">
         </div>
     </div>
+
+    <div class="uk-grid">
+        <div class="uk-width-1-1@s uk-width-1-3@m">
+            <label class="uk-form-label">Tags</label>
+            <div class="uk-text-meta">Select a tags for your task.</div>
+        </div>
+        <div class="uk-width-1-1@s uk-width-2-3@m">
+            <multiselect :init-value="{{ json_encode(old('tags', $task->exists ? $task->tags()->pluck('id')->toArray() : []))  }}"></multiselect>
+        @if($errors->has('tags'))
+                <p class="uk-text-danger">{{$errors->first('tags')}}</p>
+            @endif
+        </div>
+    </div>
+
     <hr class="uk-divider-icon">
     <div class="uk-grid">
         <div class="uk-width-1-1@s uk-width-1-3@m">
@@ -153,6 +171,31 @@
     <hr class="uk-divider-icon">
     <div class="uk-grid">
         <div class="uk-width-1-1@s uk-width-1-3@m">
+            <label class="uk-form-label">Ping URL Before (optional)</label>
+            <div class="uk-text-meta">The scheduler can automatically ping a given URL before a task is launched. This method is useful for notifying an external service, that your scheduled task is commencing</div>
+        </div>
+        <div class="uk-width-1-1@s uk-width-2-3@m">
+            <input type="text" id="ping_url_before" name="ping_url_before" value="{{old('ping_url_before', $task->ping_url_before)}}" class="uk-input" placeholder="e.g. https://cronitor.link/xxxxxx">
+            @if($errors->has('ping_url_before'))
+                <p class="uk-text-danger">{{$errors->first('ping_url_before')}}</p>
+            @endif
+        </div>
+    </div>
+    <div class="uk-grid">
+        <div class="uk-width-1-1@s uk-width-1-3@m">
+            <label class="uk-form-label">Ping URL After (optional)</label>
+            <div class="uk-text-meta">The scheduler can automatically ping a given URL after a task is complete. This method is useful for notifying an external service, that your scheduled task is has finished execution</div>
+        </div>
+        <div class="uk-width-1-1@s uk-width-2-3@m">
+            <input type="text" id="ping_url_after" name="ping_url_after" value="{{old('ping_url_after', $task->ping_url_after)}}" class="uk-input" placeholder="e.g. https://cronitor.link/xxxxxx">
+            @if($errors->has('ping_url_after'))
+                <p class="uk-text-danger">{{$errors->first('ping_url_after')}}</p>
+            @endif
+        </div>
+    </div>
+    <hr class="uk-divider-icon">
+    <div class="uk-grid">
+        <div class="uk-width-1-1@s uk-width-1-3@m">
             <label class="uk-form-label">Email Notification (optional)</label>
             <div class="uk-text-meta">Add an email address to receive notifications when this task gets executed. Leave empty if you do not wish to receive email notifications</div>
         </div>
@@ -194,6 +237,7 @@
             <ul class="uk-list uk-padding-remove">
                 <li class="uk-text-meta">Decide whether multiple instances of same task should overlap each other or not.</li>
                 <li class="uk-text-meta">Decide whether the task should be executed while the app is in maintenance mode.</li>
+                <li class="uk-text-meta">Decide whether the task should be executed on a single server.</li>
             </ul>
         </div>
         <div class="uk-width-1-1@s uk-width-2-3@m uk-form-controls-text">
@@ -210,6 +254,36 @@
                     Run in maintenance mode
                 </label>
             </div>
+            <div class="uk-margin">
+                <label class="uk-margin">
+                    <input type="hidden" name="run_on_one_server" id="run_on_one_server" value="0" {{old('run_on_one_server', $task->run_on_one_server) ? '' : 'checked'}}>
+                    <input type="checkbox" name="run_on_one_server" id="run_on_one_server" value="1" {{old('run_on_one_server', $task->run_on_one_server) ? 'checked' : ''}}>
+                    Run on a single server
+                </label>
+            </div>
+        </div>
+    </div>
+    <hr class="uk-divider-icon">
+    <div class="uk-grid">
+        <div class="uk-width-1-1@s uk-width-1-3@m">
+            <div class="uk-form-label">Cleanup Options</div>
+            <ul class="uk-list uk-padding-remove">
+                <li class="uk-text-meta">Determine if an over-abundance of results will be removed after a set limit or age. Set non-zero value to enable.</li>
+            </ul>
+        </div>
+        <div class="uk-width-1-1@s uk-width-2-3@m uk-form-controls-text">
+            <label class="uk-margin">
+                Auto Cleanup results after
+                <br>
+                <input type="number" name="auto_cleanup_num" id="auto_cleanup_num" value="{{ old('auto_cleanup_num', $task->auto_cleanup_num) ?? 0 }}" />
+                <br>
+                <label>
+                    <input type="radio" name="auto_cleanup_type" value="days" {{old('auto_cleanup_type', $task->auto_cleanup_type) !== 'results' ? '' : 'checked'}}> Days
+                </label><br>
+                <label>
+                    <input type="radio" name="auto_cleanup_type" value="results" {{old('auto_cleanup_type', $task->auto_cleanup_type) === 'results' ? '' : 'checked'}}> Results
+                </label>
+            </label>
         </div>
     </div>
 @stop

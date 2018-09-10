@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTasksTableAddNotificationsFields extends Migration
+class AlterTasksTableAddAutoCleanupNumAndTypeFields extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class AlterTasksTableAddNotificationsFields extends Migration
     public function up()
     {
         Schema::table(config('totem.table_prefix').'tasks', function (Blueprint $table) {
-            $table->string('notification_phone_number')->nullable()->after('notification_email_address');
-            $table->string('notification_slack_webhook')->nullable()->after('notification_phone_number');
+            $table->integer('auto_cleanup_num')->default(0);
+            $table->string('auto_cleanup_type', 20)->nullable();
         });
     }
 
@@ -27,11 +27,11 @@ class AlterTasksTableAddNotificationsFields extends Migration
     public function down()
     {
         Schema::table(config('totem.table_prefix').'tasks', function (Blueprint $table) {
-            $table->dropColumn('notification_phone_number');
+            $table->dropColumn('auto_cleanup_num');
         });
 
         Schema::table(config('totem.table_prefix').'tasks', function (Blueprint $table) {
-            $table->dropColumn('notification_slack_webhook');
+            $table->dropColumn('auto_cleanup_type');
         });
     }
 }
