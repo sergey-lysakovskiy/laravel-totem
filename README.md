@@ -28,7 +28,7 @@ Manage your `Laravel Schedule` from a pretty dashboard. Schedule your `Laravel C
 `Totem` requires Laravel v5.4 and above, please refer to the above table for compatability. Use composer to install totem to your Laravel project
 
 ```
-composer require studio/laravel-totem
+composer require ligl/laravel-totem-mod
 ```
 
 > Laravel Totem supports auto package discovery for Laravel v5.5+, therefore service provider registration is not required in Laravel v5.5+
