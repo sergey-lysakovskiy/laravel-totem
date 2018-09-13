@@ -186,6 +186,7 @@ class TasksController extends Controller
                             'auto_cleanup_type' => $record->auto_cleanup_type,
                             'ping_url_before' => $record->ping_url_before,
                             'ping_url_after' => $record->ping_url_after,
+                            'environment' => $record->environment,
                         ]);
 
                         if (! empty($record->frequencies)) {
