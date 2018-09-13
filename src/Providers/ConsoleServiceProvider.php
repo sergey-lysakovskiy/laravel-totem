@@ -31,33 +31,37 @@ class ConsoleServiceProvider extends ServiceProvider
         $tasks = app('totem.tasks')->findAllActive();
 
         $tasks->each(function ($task) use ($schedule) {
-            $event = $schedule->command($task->command, $task->compileParameters(true));
+            // check if environment is set
+            $environment = App::environment();
+            if ($task->environment && $environment == $task->environment) {
+                $event = $schedule->command($task->command, $task->compileParameters(true));
 
-            $event->cron($task->getCronExpression())
-                ->name($task->description)
-                ->timezone($task->timezone)
-                ->before(function () use ($task, $event) {
-                    $event->start = microtime(true);
-                    Executing::dispatch($task);
-                })
-                ->after(function () use ($event, $task) {
-                    Executed::dispatch($task, $event->start);
-                })
-                ->sendOutputTo(storage_path($task->getMutexName()));
-            if($task->ping_url_before) {
-                $event->pingBefore($task->ping_url_before);
-            }
-            if($task->ping_url_after) {
-                $event->thenPing($task->ping_url_after);
-            }
-            if ($task->dont_overlap) {
-                $event->withoutOverlapping(60);
-            }
-            if ($task->run_in_maintenance) {
-                $event->evenInMaintenanceMode();
-            }
-            if ($task->run_on_one_server && in_array(config('cache.default'), ['memcached', 'redis'])) {
-                $event->onOneServer();
+                $event->cron($task->getCronExpression())
+                    ->name($task->description)
+                    ->timezone($task->timezone)
+                    ->before(function () use ($task, $event) {
+                        $event->start = microtime(true);
+                        Executing::dispatch($task);
+                    })
+                    ->after(function () use ($event, $task) {
+                        Executed::dispatch($task, $event->start);
+                    })
+                    ->sendOutputTo(storage_path($task->getMutexName()));
+                if($task->ping_url_before) {
+                    $event->pingBefore($task->ping_url_before);
+                }
+                if($task->ping_url_after) {
+                    $event->thenPing($task->ping_url_after);
+                }
+                if ($task->dont_overlap) {
+                    $event->withoutOverlapping(60);
+                }
+                if ($task->run_in_maintenance) {
+                    $event->evenInMaintenanceMode();
+                }
+                if ($task->run_on_one_server && in_array(config('cache.default'), ['memcached', 'redis'])) {
+                    $event->onOneServer();
+                }
             }
         });
     }
