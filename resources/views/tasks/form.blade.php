@@ -193,6 +193,18 @@
             @endif
         </div>
     </div>
+    <div class="uk-grid">
+        <div class="uk-width-1-1@s uk-width-1-3@m">
+            <label class="uk-form-label">Environment (optional)</label>
+            <div class="uk-text-meta">If set, the task will run only on this environment</div>
+        </div>
+        <div class="uk-width-1-1@s uk-width-2-3@m">
+            <input type="text" id="environment" name="environment" value="{{old('environment', $task->environment)}}" class="uk-input" placeholder="e.g. production">
+            @if($errors->has('environment'))
+                <p class="uk-text-danger">{{$errors->first('environment')}}</p>
+            @endif
+        </div>
+    </div>
     <hr class="uk-divider-icon">
     <div class="uk-grid">
         <div class="uk-width-1-1@s uk-width-1-3@m">

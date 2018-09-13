@@ -50,6 +50,10 @@
             <span class="uk-float-left">{{$task->ping_url_after or 'N/A'}}</span>
         </li>
         <li>
+            <span class="uk-text-muted uk-float-right">Environment</span>
+            <span class="uk-float-left">{{$task->environment or 'N/A'}}</span>
+        </li>
+        <li>
             <span class="uk-text-muted uk-float-right">Email Notification</span>
             <span class="uk-float-left">{{$task->notification_email_address or 'N/A'}}</span>
         </li>
