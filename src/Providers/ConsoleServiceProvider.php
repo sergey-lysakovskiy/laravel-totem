@@ -32,7 +32,7 @@ class ConsoleServiceProvider extends ServiceProvider
 
         $tasks->each(function ($task) use ($schedule) {
             // check if environment is set
-            $environment = app('app.env');
+            $environment = config('app.env');
             if ($task->environment && $environment == $task->environment) {
                 $event = $schedule->command($task->command, $task->compileParameters(true));
 
