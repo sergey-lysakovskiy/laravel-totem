@@ -45,6 +45,7 @@ class Task extends TotemModel
     protected $appends = [
         'activated',
         'upcoming',
+        'tagging',
     ];
 
     /**
@@ -65,6 +66,16 @@ class Task extends TotemModel
     public function getUpcomingAttribute()
     {
         return CronExpression::factory($this->getCronExpression())->getNextRunDate()->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * Tagging Accessor.
+     *
+     * @return array
+     */
+    public function getTaggingAttribute()
+    {
+        return $this->tags;
     }
 
     /**

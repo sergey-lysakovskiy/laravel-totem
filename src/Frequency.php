@@ -11,6 +11,7 @@ class Frequency extends TotemModel
     protected $table = 'task_frequencies';
 
     protected $fillable = [
+        'task_id',
         'label',
         'interval',
     ];

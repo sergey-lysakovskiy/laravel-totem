@@ -2,9 +2,11 @@
 
 namespace Studio\Totem\Http\Controllers;
 
+use Studio\Totem\Tag;
 use Studio\Totem\Task;
 use Studio\Totem\Totem;
 use Studio\Totem\Frequency;
+use Studio\Totem\Parameter;
 use Studio\Totem\Contracts\TaskInterface;
 use Studio\Totem\Http\Requests\TaskRequest;
 
@@ -151,7 +153,7 @@ class TasksController extends Controller
     {
         return response($this->tasks->findAll()->toJson(), 200, [
             'Content-Type' => 'application/json',
-            'Content-Disposition' => 'attachment; filename="totem_tasks.json"',
+            'Content-Disposition' => 'attachment; filename="tasks.json"',
         ]);
     }
 
@@ -189,17 +191,41 @@ class TasksController extends Controller
                             'environment' => $record->environment,
                         ]);
 
-                        if (! empty($record->frequencies)) {
+                        if (!empty($record->frequencies)) {
                             foreach ($record->frequencies as $freq) {
-                                Frequency::updateOrCreate([
+                                $frequency = Frequency::updateOrCreate([
                                     'id' => $freq->id,
                                 ], [
                                     'task_id' => $task->id,
                                     'label' => $freq->label,
                                     'interval' => $freq->interval,
                                 ]);
+
+                                if (!empty($freq->parameters)) {
+                                    foreach ($freq->parameters as $parameter) {
+                                        Parameter::updateOrCreate([
+                                            'id' => $parameter->id
+                                        ], [
+                                            'frequency_id' => $frequency->id,
+                                            'name' => $parameter->name,
+                                            'value' => $parameter->value,
+                                        ]);
+                                    }
+                                }
                             }
                         }
+
+                        if (!empty($record->tagging)) {
+                            foreach ($record->tagging as $tag) {
+                                Tag::updateOrCreate([
+                                    'id' => $tag->id,
+                                ], [
+                                    'name' => $tag->name
+                                ]);
+                                $task->tags()->attach($tag->id);
+                            }
+                        }
+
                         $records_imported++;
                     }
                 } catch (\Exception $ex) {
