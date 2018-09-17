@@ -9,8 +9,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>
-            Totem
-            @yield('page-title')
+            @yield('page-title') | {{ config('app.name') }} | Commands
         </title>
         <link rel="stylesheet" type="text/css" href="{{ asset('/vendor/totem/css/app.css') }}">
         @stack('style')

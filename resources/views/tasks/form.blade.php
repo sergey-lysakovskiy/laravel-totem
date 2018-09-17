@@ -218,7 +218,7 @@
             @endif
         </div>
     </div>
-    <div class="uk-grid">
+    <div class="uk-grid" style="display:none;">
         <div class="uk-width-1-1@s uk-width-1-3@m">
             <label class="uk-form-label">SMS Notification (optional)</label>
             <div class="uk-text-meta">Add a phone number to receive SMS notifications. Leave empty if you do not wish to receive sms notifications</div>

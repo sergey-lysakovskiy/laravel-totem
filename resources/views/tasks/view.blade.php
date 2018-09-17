@@ -61,7 +61,7 @@
             <span class="uk-text-muted uk-float-right">SMS Notification</span>
             <span class="uk-float-left">{{$task->notification_phone_number or 'N/A'}}</span>
         </li>
-        <li>
+        <li style="display:none;">
             <span class="uk-text-muted uk-float-right">Slack Notification</span>
             <span class="uk-float-left">{{$task->notification_slack_webhook or 'N/A'}}</span>
         </li>
