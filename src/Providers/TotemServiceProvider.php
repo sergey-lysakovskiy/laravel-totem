@@ -27,6 +27,22 @@ class TotemServiceProvider extends ServiceProvider
         Validator::extend('cron_expression', function ($attribute, $value, $parameters, $validator) {
             return CronExpression::isValidExpression($value);
         });
+
+        Validator::extend('emails', function($attribute, $value, $parameters) {
+            $rules = [
+                'email' => 'required|email',
+            ];
+            foreach (array_map('trim', explode(',', $value)) as $email) {
+                $data = [
+                    'email' => $email
+                ];
+                $validator = Validator::make($data, $rules);
+                if ($validator->fails()) {
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 
     /**

@@ -30,7 +30,7 @@ class TaskRequest extends FormRequest
             'frequencies'                => 'required_if:type,frequency|array',
             'ping_url_before'            => 'nullable|url',
             'ping_url_after'             => 'nullable|url',
-            'notification_email_address' => 'nullable|email',
+            'notification_email_address' => 'nullable|emails',
             'notification_phone_number'  => 'nullable|digits_between:11,13',
             'notification_slack_webhook' => 'nullable|url',
             'tags'                       => 'array|required'
