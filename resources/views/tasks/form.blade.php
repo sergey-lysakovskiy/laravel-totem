@@ -208,8 +208,8 @@
     <hr class="uk-divider-icon">
     <div class="uk-grid">
         <div class="uk-width-1-1@s uk-width-1-3@m">
-            <label class="uk-form-label">Email Notification (optional)</label>
-            <div class="uk-text-meta">Add an email address to receive notifications when this task gets executed. Leave empty if you do not wish to receive email notifications</div>
+            <label class="uk-form-label">Email(s) Notification (optional)</label>
+            <div class="uk-text-meta">Add one email address or more (comma separated) to receive notifications when this task gets executed. Leave empty if you do not wish to receive email notifications</div>
         </div>
         <div class="uk-width-1-1@s uk-width-2-3@m">
             <input type="text" id="email" name="notification_email_address" value="{{old('notification_email_address', $task->notification_email_address)}}" class="uk-input" placeholder="e.g. john.doe@name.tld">
