@@ -88,9 +88,8 @@ class TaskCompleted extends Notification implements ShouldQueue
             ->content(config('app.name'))
             ->attachment(function (SlackAttachment $attachment) use ($notifiable) {
                 $attachment
-                    ->title(config('app.name') . ' Task')
-                    ->pretext($notifiable->description.' result.')
-                    ->text($this->output);
+                    ->title($notifiable->description.' result.')
+                    ->content($this->output);
             });
     }
 }
