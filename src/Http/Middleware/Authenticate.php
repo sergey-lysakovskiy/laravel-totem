@@ -15,6 +15,6 @@ class Authenticate
      */
     public function handle($request, $next)
     {
-        return Totem::check($request) ? $next($request) : abort(403);
+        return Totem::check($request) ? $next($request) : redirect('/');
     }
 }
