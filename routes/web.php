@@ -7,9 +7,9 @@
 |
 */
 
-Route::get('/', 'DashboardController@index')->name('totem.dashboard');
+Route::get('/', 'DashboardController@index')->name('totem.dashboard')->middleware('auth');
 
-Route::group(['prefix' => 'tasks'], function () {
+Route::group(['prefix' => 'tasks', 'middleware' => 'auth'], function () {
     Route::get('/', 'TasksController@index')->name('totem.tasks.all');
 
     Route::get('create', 'TasksController@create')->name('totem.task.create');
