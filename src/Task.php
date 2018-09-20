@@ -162,7 +162,7 @@ class Task extends TotemModel
      */
     public function routeNotificationForMail()
     {
-        return array_map('trim', explode(',', $$this->notification_email_address));
+        return array_map('trim', explode(',', $this->notification_email_address));
     }
 
     /**

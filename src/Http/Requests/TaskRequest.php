@@ -53,7 +53,7 @@ class TaskRequest extends FormRequest
             'cron_expression'                                 => 'This is not a valid cron expression.',
             'ping_url_before'                                 => 'Ping before field must contain a valid url',
             'ping_url_after'                                  => 'Ping after field must contain a valid url',
-            'notification_email_address.email'                => 'Email address is not valid',
+            'notification_email_address.emails'               => 'Email address is not valid',
             'notification_phone_number.digits_between'        => 'Phone number should be between 11 and 13 digits including country code',
             'notification_slack_webhook.url'                  => 'Slack Webhook must be a valid url',
             'tags.required'                                   => 'Please select a one tag or more'
